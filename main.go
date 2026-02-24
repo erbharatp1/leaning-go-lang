@@ -2,21 +2,26 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"math"
 )
 
 func main() {
 	var investmentAmt float64
-	var expectedReturnRate float64
-	var years float64
-	fmt.Print("Enter investment Amt: ")
-	fmt.Scan(&investmentAmt)
-	fmt.Print("Enter investment Years: ")
-	fmt.Scan(&years)
-	fmt.Print("Enter investment expectedReturnRate: ")
-	fmt.Scan(&expectedReturnRate)
-	featureInvestment := investmentAmt * math.Pow(1+expectedReturnRate/100, years)
-	log.Println("Investment calculation completed", featureInvestment)
+	var salePrice float64
+	var amt float64
+	fmt.Print("\nEnter the Actual Product Cost = ")
+	fmt.Scanln(&investmentAmt)
+
+	fmt.Print("\nEnter the Sale Price = ")
+	fmt.Scanln(&salePrice)
+
+	if salePrice > investmentAmt {
+		amt = salePrice - investmentAmt
+		fmt.Println("Total Profit = ", amt)
+	} else if investmentAmt > salePrice {
+		amt = investmentAmt - salePrice
+		fmt.Println("Total Loss = ", amt)
+	} else {
+		fmt.Println("No Profit No Loss")
+	}
 
 }
