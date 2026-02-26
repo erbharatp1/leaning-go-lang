@@ -1,27 +1,27 @@
 package main
 
 import (
+	"damo-go/greetings"
 	"fmt"
+	"log"
 )
 
 func main() {
-	var investmentAmt float64
-	var salePrice float64
-	var amt float64
-	fmt.Print("\nEnter the Actual Product Cost = ")
-	fmt.Scanln(&investmentAmt)
+	// Set properties of the predefined Logger, including
+	// the log entry prefix and a flag to disable printing
+	// the time, source file, and line number.
+	log.SetPrefix("greetings: ")
+	log.SetFlags(0)
 
-	fmt.Print("\nEnter the Sale Price = ")
-	fmt.Scanln(&salePrice)
-
-	if salePrice > investmentAmt {
-		amt = salePrice - investmentAmt
-		fmt.Println("Total Profit = ", amt)
-	} else if investmentAmt > salePrice {
-		amt = investmentAmt - salePrice
-		fmt.Println("Total Loss = ", amt)
-	} else {
-		fmt.Println("No Profit No Loss")
+	// Request a greeting message.
+	message, err := greetings.Hello("Bharat")
+	// If an error was returned, print it to the console and
+	// exit the program.
+	if err != nil {
+		log.Fatal(err)
 	}
 
+	// If no error was returned, print the returned message
+	// to the console.
+	fmt.Println(message)
 }
