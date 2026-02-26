@@ -1,7 +1,6 @@
 package calculator
 
 import (
-	"damo-go/greetings"
 	"fmt"
 )
 
@@ -9,7 +8,6 @@ func main() {
 	var productAmt float64
 	var productSalePrice float64
 	var amt float64
-	fmt.Println(greetings.Hello("Bharat"))
 	fmt.Print("\nEnter the Actual Product Cost = ")
 	fmt.Scanln(&productAmt)
 
@@ -26,5 +24,4 @@ func main() {
 		fmt.Println("No Profit No Loss")
 	}
 
-	greetings.Hello("Bharat")
 }
