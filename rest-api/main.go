@@ -1,9 +1,9 @@
 package main
 
 import (
-	"damo-go/db"
-	"damo-go/model"
 	"fmt"
+	"leaning-go-lang/db"
+	"leaning-go-lang/model"
 	"log"
 	"net/http"
 

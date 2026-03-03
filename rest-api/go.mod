@@ -1,4 +1,4 @@
-module damo-go
+module leaning-go-lang
 
 go 1.25.0
 

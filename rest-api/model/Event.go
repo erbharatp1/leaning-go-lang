@@ -1,7 +1,7 @@
 package model
 
 import (
-	"damo-go/db"
+	"leaning-go-lang/db"
 	"log"
 	"time"
 )
@@ -14,8 +14,6 @@ type Event struct {
 	Description string    `json:"description" binding:"required"`
 	UserId      string
 }
-
-var events = []Event{}
 
 func (e *Event) Save() error {
 	query := `INSERT INTO events (name, location, description, UserId, DateTime) VALUES (?, ?, ?, ?, ?)`
@@ -65,4 +63,19 @@ func EventsList() []Event {
 		events = append(events, e)
 	}
 	return events
+}
+
+func FindByName(name string) (*Event, error) {
+	log.Println("FindByName")
+	query := "SELECT id, name, location, description, UserId, DateTime FROM events WHERE name = ?"
+	row := db.DB.QueryRow(query, name)
+	log.Println(query)
+	var event Event
+	err := row.Scan(&event.ID, &event.Name, &event.Location, &event.Description, &event.UserId, &event.DateTime)
+	if err != nil {
+		log.Printf("Error scanning event by name: %v", err)
+		return nil, err
+	}
+	log.Println(event)
+	return &event, nil
 }
