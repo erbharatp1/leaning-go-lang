@@ -3,22 +3,37 @@ package main
 import (
 	"damo-go/db"
 	"damo-go/model"
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/Pallinder/go-randomdata"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	log.Println("main")
+	randomDataGenerate()
 	db.InitDB()
 	server := gin.Default()
 
 	server.GET("/events", getEvents)
 	server.POST("/events", createEvent)
+	server.GET("/events/:name", getByName)
 
-	log.Println("getEvents")
 	server.Run("localhost:8082")
+}
+
+func getByName(context *gin.Context) {
+	name := context.Param("name")
+	log.Println("getByName")
+	event, err := model.FindByName(name)
+	if err != nil {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+	context.JSON(http.StatusOK, event)
+	log.Println(event)
 }
 
 func createEvent(context *gin.Context) {
@@ -39,4 +54,20 @@ func createEvent(context *gin.Context) {
 func getEvents(c *gin.Context) {
 	log.Println("getEvents")
 	c.JSON(http.StatusOK, model.EventsList())
+}
+
+func randomDataGenerate() {
+	log.Println("random Data Generator")
+	fmt.Println(randomdata.FullName(randomdata.RandomGender))
+	fmt.Println(randomdata.Email())
+	fmt.Println(randomdata.Address())
+	fmt.Println(randomdata.City())
+	fmt.Println(randomdata.State(randomdata.Large))
+	fmt.Println(randomdata.Country(randomdata.FullCountry))
+	fmt.Println(randomdata.PostalCode("SE"))
+	fmt.Println(randomdata.PhoneNumber())
+	fmt.Println(randomdata.IpV4Address())
+	fmt.Println(randomdata.Day())
+	fmt.Println(randomdata.Month())
+
 }
