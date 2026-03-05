@@ -1,0 +1,23 @@
+package routes
+
+import (
+	"leaning-go-lang/model"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func signup(context *gin.Context) {
+	var user model.User
+	if err := context.ShouldBindJSON(&user); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse user"})
+		return
+	}
+	if err := user.Save(); err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save user"})
+		return
+	}
+	context.JSON(http.StatusCreated, gin.H{"message": "User created", "status": "success", "code": 200, "user": user})
+	log.Println("signup")
+}

@@ -15,19 +15,32 @@ func InitDB() {
 		panic(err)
 	}
 	DB.SetMaxOpenConns(10)
-	//DB.SetConnMaxIdleTime(5)
+	_, err = DB.Exec("PRAGMA foreign_keys = ON")
+	if err != nil {
+		panic("Could not enable foreign keys: " + err.Error())
+	}
 	createTable()
 
 }
 
 func createTable() {
+
+	createUserTable := `CREATE TABLE IF NOT EXISTS user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, 
+    password TEXT NOT NULL
+)`
+	_, err := DB.Exec(createUserTable)
+	if err != nil {
+		panic("Could not User create table: " + err.Error())
+	}
 	createEventTable := `CREATE TABLE IF NOT EXISTS events(
     id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, location TEXT NOT NULL, DateTime DATETIME NOT NULL,
-    description TEXT NOT NULL, UserId TEXT NOT NULL
+    description TEXT NOT NULL, UserId INTEGER NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES user(id) ON DELETE CASCADE
 )`
-	_, err := DB.Exec(createEventTable)
+	_, err = DB.Exec(createEventTable)
 	if err != nil {
-		panic("Could not create table")
+		panic("Could not events create table: " + err.Error())
 	}
 
 }
