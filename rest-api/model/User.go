@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"leaning-go-lang/db"
 	"leaning-go-lang/util"
 	"log"
@@ -8,7 +9,7 @@ import (
 
 type User struct {
 	ID       int64
-	Name     string `json:"name" binding:"required"`
+	Name     string
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
@@ -40,5 +41,24 @@ func (e *User) Save() error {
 	}
 
 	e.ID = id
+	return nil
+}
+
+func (u *User) ValidateUser() error {
+	query := "SELECT password FROM user WHERE email = ? "
+	row := db.DB.QueryRow(query, u.Email)
+
+	var retrievedPassword string
+	err := row.Scan(&retrievedPassword)
+	if err != nil {
+		log.Printf("Error scanning user by email: %v", err)
+		return errors.New("InValid credentials")
+	}
+	log.Println("retrievedPassword: ", retrievedPassword)
+	log.Println(" U Password: ", u.Password)
+	isValidaPassword := util.DecryptPassword(u.Password, retrievedPassword)
+	if !isValidaPassword {
+		return errors.New("InValid credentials")
+	}
 	return nil
 }

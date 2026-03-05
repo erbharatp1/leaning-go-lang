@@ -1,0 +1,23 @@
+info:
+  name: "/login "
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: http://localhost:8084/login
+  body:
+    type: json
+    data: |-
+      {
+       
+        "email": "1728@7novels.in",
+        "password": "sdfgh"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
