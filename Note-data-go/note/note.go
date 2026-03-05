@@ -10,9 +10,9 @@ import (
 )
 
 type Note struct {
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	createdAt time.Time
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	createdAt time.Time `json:"createdAt"`
 }
 
 func (note Note) DisplayNote() {
@@ -21,7 +21,6 @@ func (note Note) DisplayNote() {
 func (note Note) SaveNote() error {
 	fileName := strings.ReplaceAll(note.Title, " ", "_")
 	fileName = strings.ToLower(fileName)
-	note.createdAt = time.Now()
 	json, err := json2.Marshal(note)
 	if err != nil {
 		fmt.Println("Error:", err)

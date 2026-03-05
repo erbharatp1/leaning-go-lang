@@ -7,6 +7,10 @@ import (
 	"os"
 )
 
+type saver interface {
+	SaveNote() error
+}
+
 func getNoteData() (string, string, error) {
 	title, err := getUserInfo("Notes title:")
 	if err != nil {
@@ -29,15 +33,25 @@ func main() {
 		return
 	}
 	note.DisplayNote()
-	err = note.SaveNote()
-	if err != nil {
-		fmt.Println("Error during saving the note:", err)
-		return
-	}
-	fmt.Println("Title:", title)
-	fmt.Println("Content:", content)
+
+	err = saveData(note)
+
+	//err = note.SaveNote()
+	//if err != nil {
+	//	fmt.Println("Error during saving the note:", err)
+	//	return
+	//}
+
 	//	fmt.Println("Title:", title)
 	//fmt.Println("Content:", content)
+}
+func saveData(data saver) error {
+	err := data.SaveNote()
+	if err != nil {
+		fmt.Println("Error during saving the note:", err)
+		return err
+	}
+	return nil
 }
 
 func getUserInfo(promptTest string) (string, error) {

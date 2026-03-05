@@ -10,11 +10,10 @@ http:
     type: json
     data: |-
       {
-          "ID": "123456y",
-          "Name": "Shivay",
-          "Location": "damoh",
-          "Description": "boy"
-        }
+        "name": "WAR",
+        "location": "Dubai ",
+        "description": "Dubai"
+      }
   auth: inherit
 
 settings:
