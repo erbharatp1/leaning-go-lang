@@ -43,6 +43,27 @@ func (e *Event) Save() error {
 	return nil
 }
 
+func (e *Event) Update() error {
+	query := `UPDATE events SET name = ?, location = ?, description = ?, UserId = ?, DateTime = ? WHERE id = ?`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		log.Printf("Error preparing update statement: %v", err)
+		return err
+	}
+	defer stmt.Close()
+
+	if e.DateTime.IsZero() {
+		e.DateTime = time.Now()
+	}
+
+	_, err = stmt.Exec(e.Name, e.Location, e.Description, e.UserId, e.DateTime, e.ID)
+	if err != nil {
+		log.Printf("Error executing update statement: %v", err)
+		return err
+	}
+	return nil
+}
+
 func EventsList() []Event {
 	query := "SELECT id, name, location, description, UserId, DateTime FROM events"
 	rows, err := db.DB.Query(query)
@@ -77,5 +98,18 @@ func FindByName(name string) (*Event, error) {
 		return nil, err
 	}
 	log.Println(event)
+	return &event, nil
+}
+
+func FindByID(id int64) (*Event, error) {
+	log.Printf("FindByID: %d", id)
+	query := "SELECT id, name, location, description, UserId, DateTime FROM events WHERE id = ?"
+	row := db.DB.QueryRow(query, id)
+	var event Event
+	err := row.Scan(&event.ID, &event.Name, &event.Location, &event.Description, &event.UserId, &event.DateTime)
+	if err != nil {
+		log.Printf("Error scanning event by ID: %v", err)
+		return nil, err
+	}
 	return &event, nil
 }

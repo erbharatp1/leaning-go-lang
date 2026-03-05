@@ -1,0 +1,23 @@
+info:
+  name: Update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8084/events/id/6
+  body:
+    type: json
+    data: |-
+      {
+        "name": "WAR YY",
+        "location": "Dubai ",
+        "description": "Dubai"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

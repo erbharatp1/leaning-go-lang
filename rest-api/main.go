@@ -17,7 +17,7 @@ func main() {
 	server := gin.Default()
 	routes.RegisterRoutes(server)
 
-	server.Run("localhost:8082")
+	server.Run("localhost:8084")
 }
 
 func randomDataGenerate() {
