@@ -18,6 +18,8 @@ func signup(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save user"})
 		return
 	}
+	// For security reasons, don't return the hashed password in the response.
+	//user.Password = ""
 	context.JSON(http.StatusCreated, gin.H{"message": "User created", "status": "success", "code": 200, "user": user})
 	log.Println("signup")
 }

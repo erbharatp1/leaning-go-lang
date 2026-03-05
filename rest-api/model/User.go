@@ -2,6 +2,7 @@ package model
 
 import (
 	"leaning-go-lang/db"
+	"leaning-go-lang/util"
 	"log"
 )
 
@@ -20,12 +21,18 @@ func (e *User) Save() error {
 		return err
 	}
 	defer stmt.Close()
-
-	result, err := stmt.Exec(e.Name, e.Email, e.Password)
+	hashPassword, err := util.HashPassword(e.Password)
+	if err != nil {
+		log.Printf("Error hashing password: %v", err)
+		return err
+	}
+	log.Println(hashPassword)
+	result, err := stmt.Exec(e.Name, e.Email, hashPassword)
 	if err != nil {
 		log.Printf("Error executing statement: %v", err)
 		return err
 	}
+	e.Password = hashPassword
 	id, err := result.LastInsertId()
 	if err != nil {
 		log.Printf("Error getting last insert ID: %v", err)
